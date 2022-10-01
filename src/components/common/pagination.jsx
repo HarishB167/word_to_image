@@ -28,11 +28,6 @@ function Pagination({
     } else return currentPage + i - pageAppendAtOneDirectionCount;
   });
 
-  console.log("pages :>> ", pages);
-  console.log(
-    "pageAppendAtOneDirectionCount :>> ",
-    pageAppendAtOneDirectionCount
-  );
   return (
     <nav aria-label={ariaLabel}>
       <ul className="pagination my-1">
