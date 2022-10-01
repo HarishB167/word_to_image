@@ -31,6 +31,11 @@ const NavBar = () => {
                 New Image
               </Link>
             </li>
+            <li className="nav-item">
+              <Link className="nav-link" aria-current="page" to="/list-image">
+                View All
+              </Link>
+            </li>
           </ul>
         </div>
       </div>

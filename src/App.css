@@ -45,3 +45,34 @@ button.button_bg_color:hover {
 .c-pointer {
   cursor: pointer;
 }
+
+/* For tables */
+
+.table-scroll {
+  width: 100%;
+}
+.thead-scroll,
+.tbody-scroll .tr-scroll {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+.tbody-scroll {
+  display: block;
+  overflow-y: auto;
+  table-layout: fixed;
+  max-height: 75vh;
+}
+
+/* For pagination */
+.page-link {
+  background-color: #b8ddcc;
+  border-color: #cdf5e3;
+  color: #2b9348;
+}
+
+.page-link.active {
+  background-color: #2b9348;
+  border-color: #2b9348;
+  color: #a4eecd;
+}

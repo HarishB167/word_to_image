@@ -1055,10 +1055,27 @@ export async function getMergedImageUrl(imageUrls) {
   return result;
 }
 
+export async function getImagesListForPageNo(pageNo, pageSize) {
+  return images.slice(
+    (pageNo - 1) * pageSize,
+    (pageNo - 1) * pageSize + pageSize
+  );
+}
+
+export async function getImagesCount() {
+  return images.length;
+}
+
 export async function saveImage(word, imageLink) {
   const imgId = images.length + 1;
   images.push({ id: imgId, label: word, url: imageLink });
   words.push({ id: words.length + 1, word: word, image_id: imgId });
+}
+
+export async function deleteImageWithId(id) {
+  let imageInDb = images.find((img) => img.id === id);
+  images.splice(images.indexOf(imageInDb), 1);
+  return imageInDb;
 }
 
 export default {
@@ -1066,5 +1083,7 @@ export default {
   getImagesForWords,
   getAutoCompleteWords,
   getMergedImageUrl,
+  getImagesListForPageNo,
+  getImagesCount,
   saveImage,
 };

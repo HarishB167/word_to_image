@@ -69,7 +69,7 @@ function ImageForm(props) {
             onChange={handleChange}
           />
           {errors.word && (
-            <div class="bg-danger p-2 text-white bg-opacity-50 rounded-2">
+            <div className="bg-danger p-2 text-white bg-opacity-50 rounded-2">
               {errors.word}
             </div>
           )}
@@ -87,14 +87,14 @@ function ImageForm(props) {
             onChange={handleChange}
           />
           {errors.imageLink && (
-            <div class="bg-danger p-2 text-white bg-opacity-50 rounded-2">
+            <div className="bg-danger p-2 text-white bg-opacity-50 rounded-2">
               {errors.imageLink}
             </div>
           )}
         </div>
         <button
           type="submit"
-          class="btn btn-success"
+          className="btn btn-success"
           onClick={doSubmit}
           disabled={validate()}
         >
