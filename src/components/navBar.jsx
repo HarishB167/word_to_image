@@ -26,6 +26,11 @@ const NavBar = () => {
                 Home
               </Link>
             </li>
+            <li className="nav-item">
+              <Link className="nav-link" aria-current="page" to="/new-image">
+                New Image
+              </Link>
+            </li>
           </ul>
         </div>
       </div>

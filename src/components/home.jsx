@@ -60,7 +60,7 @@ function Home(props) {
   return (
     <div className="d-flex justify-content-center align-items-center mt-3 flex-column">
       <div className="mb-3 word_input_group">
-        <label htmlFor="exampleInputEmail1" className="form-label text-light">
+        <label htmlFor="words" className="form-label text-light">
           Enter Text or Sentence
         </label>
         <input

@@ -12,6 +12,18 @@ body {
   background-color: #a3b18a;
 }
 
+.button_bg_color {
+  background-color: #80b918;
+  color: white;
+}
+
+/* button.button_bg_color:active,
+button.button_bg_color:focus,
+button.button_bg_color:hover {
+  background-color: #aed16c;
+  color: white;
+} */
+
 .word_input_group {
   min-width: 75vw;
 }

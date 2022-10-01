@@ -1055,8 +1055,16 @@ export async function getMergedImageUrl(imageUrls) {
   return result;
 }
 
+export async function saveImage(word, imageLink) {
+  const imgId = images.length + 1;
+  images.push({ id: imgId, label: word, url: imageLink });
+  words.push({ id: words.length + 1, word: word, image_id: imgId });
+}
+
 export default {
   getImageForWord,
-  getImage: getImageUrl,
+  getImagesForWords,
   getAutoCompleteWords,
+  getMergedImageUrl,
+  saveImage,
 };
