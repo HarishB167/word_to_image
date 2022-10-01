@@ -13,9 +13,16 @@ export async function getImageForId(id) {
 
 export async function getImagesForWords(words) {
   const { data } = await http.get(`/get_images_for_words/?words=${words}`);
+
+  const completeWords = words.trim().split(",");
+  completeWords.pop();
+
   const imageUrls = [];
-  data.forEach((item) => {
-    imageUrls.push(item.url);
+  completeWords.forEach((item) => {
+    const img = data.find(
+      (i) => item.toLowerCase().indexOf(i.label.toLowerCase()) > -1
+    );
+    imageUrls.push(img.url);
   });
   return imageUrls;
 }
