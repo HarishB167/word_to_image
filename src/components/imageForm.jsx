@@ -1,16 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Joi from "joi-browser";
 import { toast } from "react-toastify";
-import { saveImage } from "../services/fakeWordToImageService";
+import { getImageForId, saveImage } from "../services/fakeWordToImageService";
 
 const schema = {
+  id: Joi.optional(),
   word: Joi.string().required().label("Word"),
   imageLink: Joi.string().uri().required().label("Image link"),
 };
 
 function ImageForm(props) {
-  const [data, setData] = useState({ word: "", imageLink: "" });
+  const [data, setData] = useState({ id: "", word: "", imageLink: "" });
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    async function doLoad() {
+      if (props.location.pathname !== "/new-image") {
+        const image = await getImageForId(props.match.params.id);
+        setData({ id: image.id, word: image.label, imageLink: image.url });
+      }
+    }
+    doLoad();
+  }, []);
 
   const validate = () => {
     const result = Joi.validate(data, schema, {
@@ -47,9 +58,11 @@ function ImageForm(props) {
   const doSubmit = (e) => {
     e.preventDefault();
     if (!validate()) {
-      saveImage(data.word, data.imageLink);
+      saveImage(data);
       toast.success("Image saved successfully.");
-      setData({ word: "", imageLink: "" });
+      setData({ id: "", word: "", imageLink: "" });
+      if (props.location.pathname === "/new-image") props.history.replace("/");
+      else props.history.replace("/list-image");
     }
   };
 

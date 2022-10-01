@@ -6,7 +6,33 @@ function Pagination({
   onPageNoClick,
   itemsCount,
   ariaLabel,
+  maxVisiblePageNos,
 }) {
+  if (!maxVisiblePageNos) {
+    maxVisiblePageNos = 5;
+  }
+
+  const totalPages = Math.ceil(itemsCount / pageSize);
+  const pageAppendCount = maxVisiblePageNos - 2;
+  const pageAppendAtOneDirectionCount = Math.floor(pageAppendCount / 2);
+
+  const pages = [...Array(pageAppendCount).keys()].map((i) => {
+    const startPage = currentPage - pageAppendAtOneDirectionCount;
+    const lastPage = currentPage + pageAppendAtOneDirectionCount;
+    if (startPage < 2) {
+      const paginationPageNo = i + 2;
+      return paginationPageNo;
+    } else if (lastPage >= totalPages) {
+      const paginationPageNo = totalPages - pageAppendCount + i;
+      return paginationPageNo;
+    } else return currentPage + i - pageAppendAtOneDirectionCount;
+  });
+
+  console.log("pages :>> ", pages);
+  console.log(
+    "pageAppendAtOneDirectionCount :>> ",
+    pageAppendAtOneDirectionCount
+  );
   return (
     <nav aria-label={ariaLabel}>
       <ul className="pagination my-1">
@@ -21,20 +47,53 @@ function Pagination({
             <span aria-hidden="true">&laquo;</span>
           </button>
         </li>
-        {[...Array(Math.ceil(itemsCount / pageSize))].map((e, i) => {
+        <li className="page-item">
+          <button
+            className={"page-link" + (currentPage === 1 ? " active" : "")}
+            onClick={() => onPageNoClick(1)}
+          >
+            1
+          </button>
+        </li>
+        {maxVisiblePageNos < totalPages && (
+          <li className="page-item">
+            <button className="page-link" disabled>
+              ...
+            </button>
+          </li>
+        )}
+        {pages.map((p, i) => {
           return (
             <li key={i} className="page-item">
               <button
-                className={
-                  "page-link" + (currentPage === i + 1 ? " active" : "")
-                }
-                onClick={() => onPageNoClick(i + 1)}
+                className={"page-link" + (currentPage === p ? " active" : "")}
+                onClick={() => onPageNoClick(p)}
               >
-                {i + 1}
+                {p}
               </button>
             </li>
           );
         })}
+        {maxVisiblePageNos < totalPages && (
+          <li className="page-item">
+            <button className="page-link" disabled>
+              ...
+            </button>
+          </li>
+        )}
+        <li className="page-item">
+          <button
+            className={
+              "page-link" +
+              (currentPage === Math.ceil(itemsCount / pageSize)
+                ? " active"
+                : "")
+            }
+            onClick={() => onPageNoClick(Math.ceil(itemsCount / pageSize))}
+          >
+            {Math.ceil(itemsCount / pageSize)}
+          </button>
+        </li>
         <li className="page-item">
           <button
             className="page-link"

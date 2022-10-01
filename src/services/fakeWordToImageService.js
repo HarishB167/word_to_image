@@ -1011,6 +1011,10 @@ export async function getImageForWord(word) {
   return getImageUrl(w.image_id);
 }
 
+export async function getImageForId(id) {
+  return images.find((img) => img.id === parseInt(id));
+}
+
 export async function getImagesForWords(wordList) {
   const imageUrls = [];
   wordList.forEach((item) => {
@@ -1024,7 +1028,7 @@ export async function getImagesForWords(wordList) {
 }
 
 function getImageUrl(id) {
-  const image = images.find((item) => item.id == id);
+  const image = images.find((item) => item.id == parseInt(id));
   return image.url;
 }
 
@@ -1066,10 +1070,18 @@ export async function getImagesCount() {
   return images.length;
 }
 
-export async function saveImage(word, imageLink) {
-  const imgId = images.length + 1;
-  images.push({ id: imgId, label: word, url: imageLink });
-  words.push({ id: words.length + 1, word: word, image_id: imgId });
+export async function saveImage(data) {
+  if (data.id) {
+    const img = images.find((item) => item.id === data.id);
+    img.label = data.word;
+    img.url = data.imageLink;
+    return img;
+  } else {
+    const newImage = { label: data.word, url: data.imageLink };
+    newImage.id = new Date().getTime();
+    images.push(newImage);
+    return newImage;
+  }
 }
 
 export async function deleteImageWithId(id) {
@@ -1080,6 +1092,7 @@ export async function deleteImageWithId(id) {
 
 export default {
   getImageForWord,
+  getImageForId,
   getImagesForWords,
   getAutoCompleteWords,
   getMergedImageUrl,

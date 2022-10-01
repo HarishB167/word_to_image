@@ -16,6 +16,7 @@ function App() {
         <Route path="/" exact component={Home} />
         <Route path="/new-image" exact component={ImageForm} />
         <Route path="/list-image" exact component={ImageList} />
+        <Route path="/edit-image/:id/" exact component={ImageForm} />
       </Switch>
     </div>
   );

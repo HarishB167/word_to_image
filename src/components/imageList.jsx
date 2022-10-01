@@ -7,7 +7,7 @@ import {
 import Pagination from "./common/pagination";
 import Modal from "./common/modal";
 
-const pageSize = 20;
+const pageSize = 10;
 
 function ImageList(props) {
   const [data, setData] = useState([]);
@@ -19,7 +19,6 @@ function ImageList(props) {
     const imagesCount = await getImagesCount();
     setTotalImages(imagesCount);
     const ls = await getImagesListForPageNo(currentPage, pageSize);
-    console.log("ls :>> ", ls);
     setData(ls);
   }
 
@@ -29,19 +28,24 @@ function ImageList(props) {
 
   async function doPageChange() {
     const ls = await getImagesListForPageNo(currentPage, pageSize);
-    console.log("ls :>> ", ls);
     setData(ls);
   }
+
   useEffect(() => {
     doPageChange();
   }, [currentPage]);
 
+  useEffect(() => {
+    if (currentPage > Math.ceil(totalImages / pageSize)) setCurrentPage(1);
+    doPageChange();
+  }, [totalImages]);
+
   const handleDelete = async () => {
     if (itemToDelete) {
-      console.log("Deleting some.", itemToDelete);
       await deleteImageWithId(itemToDelete);
       setItemToDelete(null);
-      doPageChange();
+      const imagesCount = await getImagesCount();
+      setTotalImages(imagesCount);
     }
   };
 
@@ -90,7 +94,9 @@ function ImageList(props) {
                 <div className="d-flex flex-column align-items-center">
                   <button
                     className="btn btn-warning btn-sm mb-2"
-                    onClick={() => props.history.push(`/edit-image/${item.id}`)}
+                    onClick={() =>
+                      props.history.push(`/edit-image/${item.id}/`)
+                    }
                   >
                     Edit
                   </button>
