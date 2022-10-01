@@ -3,7 +3,7 @@ import {
   getAutoCompleteWords,
   getImagesForWords,
   getMergedImageUrl,
-} from "../services/fakeWordToImageService";
+} from "../services/wordToImageService";
 
 function Home(props) {
   const [inputData, setInputData] = useState("");
@@ -31,9 +31,7 @@ function Home(props) {
 
   const getImagesUrlForInput = async () => {
     if (inputData !== "" && getInputBeforeLastWord() !== "") {
-      const completeWords = getInputBeforeLastWord().trim().split(",");
-      completeWords.pop();
-      setImageUrls(await getImagesForWords(completeWords));
+      setImageUrls(await getImagesForWords(getInputBeforeLastWord()));
     } else setImageUrls([]);
   };
 

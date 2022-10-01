@@ -512,9 +512,11 @@ export async function getImageForId(id) {
   return images.find((img) => img.id === parseInt(id));
 }
 
-export async function getImagesForWords(wordList) {
+export async function getImagesForWords(words) {
+  const completeWords = words.trim().split(",");
+  completeWords.pop();
   const imageUrls = [];
-  wordList.forEach((item) => {
+  completeWords.forEach((item) => {
     const img = images.find((i) => item.includes(i.label));
     imageUrls.push(img.url);
   });

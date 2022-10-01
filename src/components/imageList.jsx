@@ -3,7 +3,7 @@ import {
   deleteImageWithId,
   getImagesCount,
   getImagesListForPageNo,
-} from "../services/fakeWordToImageService";
+} from "../services/wordToImageService";
 import Pagination from "./common/pagination";
 import Modal from "./common/modal";
 

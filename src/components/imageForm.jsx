@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Joi from "joi-browser";
 import { toast } from "react-toastify";
-import { getImageForId, saveImage } from "../services/fakeWordToImageService";
+import { getImageForId, saveImage } from "../services/wordToImageService";
 
 const schema = {
   id: Joi.optional(),
