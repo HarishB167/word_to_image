@@ -1,69 +1,109 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import {
+  getAutoCompleteWords,
+  getImagesForWords,
+  getMergedImageUrl,
+} from "../services/fakeWordToImageService";
 
 function Home(props) {
+  const [inputData, setInputData] = useState("");
+  const [autoCmpWrdLst, setAutoCmpWrdLst] = useState([]);
+  const [imageUrls, setImageUrls] = useState([]);
+  const [outputImage, setOutputImage] = useState("");
+
+  const getLastWord = () => {
+    if (inputData.indexOf(",") === -1) return inputData;
+    else {
+      const ls = inputData.split(",");
+      const lastWord = ls[ls.length - 1].trim();
+      return lastWord;
+    }
+  };
+
+  const getInputBeforeLastWord = () => {
+    if (inputData.indexOf(",") === -1) return "";
+    else {
+      const ls = inputData.split(",");
+      const lastWord = ls[ls.length - 1].trim();
+      return inputData.substring(0, inputData.length - lastWord.length);
+    }
+  };
+
+  const getImagesUrlForInput = async () => {
+    if (inputData !== "" && getInputBeforeLastWord() !== "") {
+      const completeWords = getInputBeforeLastWord().trim().split(",");
+      completeWords.pop();
+      setImageUrls(await getImagesForWords(completeWords));
+    } else setImageUrls([]);
+  };
+
+  useEffect(() => {
+    async function onChangeInput() {
+      if (inputData.length !== 0 && getLastWord(inputData).length !== 0) {
+        const wordList = await getAutoCompleteWords(getLastWord(inputData));
+        setAutoCmpWrdLst(wordList);
+      } else setAutoCmpWrdLst([]);
+    }
+    onChangeInput();
+    getImagesUrlForInput();
+  }, [inputData]);
+
+  useEffect(() => {
+    async function onChangeImageUrls() {
+      if (imageUrls.length > 0)
+        setOutputImage(await getMergedImageUrl(imageUrls));
+      else setOutputImage("");
+    }
+    onChangeImageUrls();
+  }, [imageUrls]);
+
   return (
     <div className="d-flex justify-content-center align-items-center mt-3 flex-column">
-      <div className="mb-3">
-        <label for="exampleInputEmail1" className="form-label text-light">
+      <div className="mb-3 word_input_group">
+        <label htmlFor="exampleInputEmail1" className="form-label text-light">
           Enter Text or Sentence
         </label>
         <input
-          type="email"
+          type="text"
+          list="wordListOptions"
           className="form-control text_input_bg_color"
-          id="exampleInputEmail1"
-          aria-describedby="emailHelp"
+          id="words"
+          value={inputData}
+          onChange={(e) => setInputData(e.currentTarget.value)}
         />
+        {autoCmpWrdLst.length !== 0 && (
+          <datalist id="wordListOptions">
+            {autoCmpWrdLst.map((item, idx) => (
+              <option key={idx} value={getInputBeforeLastWord() + item}>
+                {item}
+              </option>
+            ))}
+          </datalist>
+        )}
       </div>
       <div>
-        <img
-          className="img-thumbnail combined-image"
-          src="https://cdn.pixabay.com/photo/2014/12/21/23/49/couch-576134__340.png"
-          alt="image 1"
-        />
+        {outputImage !== "" && (
+          <img
+            className="img-thumbnail combined-image"
+            src={outputImage}
+            alt="image 1"
+          />
+        )}
       </div>
       <div className="d-flex flex-wrap align-items-center justify-content-center mt-2">
-        <div className="logo-title-link d-flex align-items-center flex-column c-pointer m-2">
-          <img
-            className="img-thumbnail home-page-thumbnail"
-            src="https://cdn.pixabay.com/photo/2017/01/31/23/48/skull-2028286__340.png"
-            alt="image 1"
-          />
-        </div>
-        <div className="logo-title-link d-flex align-items-center flex-column c-pointer m-2">
-          <img
-            className="img-thumbnail home-page-thumbnail"
-            src="https://cdn.pixabay.com/photo/2016/04/01/12/00/automobile-1300467__340.png"
-            alt="image 1"
-          />
-        </div>
-        <div className="logo-title-link d-flex align-items-center flex-column c-pointer m-2">
-          <img
-            className="img-thumbnail home-page-thumbnail"
-            src="https://cdn.pixabay.com/photo/2013/07/13/12/03/banknotes-159085__340.png"
-            alt="image 1"
-          />
-        </div>
-        <div className="logo-title-link d-flex align-items-center flex-column c-pointer m-2">
-          <img
-            className="img-thumbnail home-page-thumbnail"
-            src="https://cdn.pixabay.com/photo/2017/01/31/15/37/evergreen-2025158__340.png"
-            alt="image 1"
-          />
-        </div>
-        <div className="logo-title-link d-flex align-items-center flex-column c-pointer m-2">
-          <img
-            className="img-thumbnail home-page-thumbnail"
-            src="https://cdn.pixabay.com/photo/2016/03/31/17/33/chest-1293748__340.png"
-            alt="image 1"
-          />
-        </div>
-        <div className="logo-title-link d-flex align-items-center flex-column c-pointer m-2">
-          <img
-            className="img-thumbnail home-page-thumbnail"
-            src="https://cdn.pixabay.com/photo/2013/07/13/12/11/umbrella-159361__340.png"
-            alt="image 1"
-          />
-        </div>
+        {imageUrls.length > 0 &&
+          imageUrls.map((imgUrl, idx) => (
+            <div
+              key={idx}
+              className="logo-title-link d-flex align-items-center flex-column c-pointer m-2"
+            >
+              <img
+                className="img-thumbnail home-page-thumbnail"
+                src={imgUrl}
+                alt={`image ${idx}`}
+              />
+            </div>
+          ))}
       </div>
     </div>
   );

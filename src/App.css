@@ -12,6 +12,10 @@ body {
   background-color: #a3b18a;
 }
 
+.word_input_group {
+  min-width: 75vw;
+}
+
 /* For images */
 .home-page-thumbnail {
   width: 100px;
@@ -24,4 +28,8 @@ body {
   max-width: 400px;
   max-height: 200px;
   object-fit: scale-down;
+}
+
+.c-pointer {
+  cursor: pointer;
 }
