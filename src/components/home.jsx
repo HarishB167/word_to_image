@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Autocomplete from "react-autocomplete";
 import {
   getAutoCompleteWords,
   getImagesForWords,
@@ -61,23 +62,34 @@ function Home(props) {
         <label htmlFor="words" className="form-label text-light">
           Enter Text or Sentence
         </label>
-        <input
-          type="text"
-          list="wordListOptions"
-          className="form-control text_input_bg_color"
+        <Autocomplete
           id="words"
+          items={autoCmpWrdLst.map((item, idx) => {
+            console.log("item :>> ", getInputBeforeLastWord() + item);
+            return { label: getInputBeforeLastWord() + item };
+          })}
+          getItemValue={(item) => item.label}
+          renderItem={(item, isHighlighted) => (
+            <div
+              style={{
+                background: isHighlighted ? "#bcf5bc" : "white",
+              }}
+              key={item.id}
+            >
+              {item.label}
+            </div>
+          )}
           value={inputData}
           onChange={(e) => setInputData(e.currentTarget.value)}
+          onSelect={(val) => setInputData(val)}
+          inputProps={{
+            className: "form-control text_input_bg_color w-100",
+            id: "words",
+          }}
+          wrapperStyle={{
+            display: "block",
+          }}
         />
-        {autoCmpWrdLst.length !== 0 && (
-          <datalist id="wordListOptions">
-            {autoCmpWrdLst.map((item, idx) => (
-              <option key={idx} value={getInputBeforeLastWord() + item}>
-                {item}
-              </option>
-            ))}
-          </datalist>
-        )}
       </div>
       <div>
         {outputImage !== "" && (
